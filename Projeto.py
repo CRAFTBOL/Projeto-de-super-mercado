@@ -1,4 +1,3 @@
-# Projeto-de-super-mercado
 opcao = -1
 cont = 0
 desi = 'p'
@@ -64,7 +63,6 @@ while True:
                             print('Descadastro feito com sucesso.')
 
         if opcao == 2:
-            desi = 'p'
             funcionarios.append(str(input('Digite o nome do funcionario: ').capitalize().strip()))
             salario.append(float(input('Digite o salario do funcionario: ').strip()))
             print('=' * 40)
@@ -84,7 +82,6 @@ while True:
                 desi = 'p'
                 if len(funcionarios) == 0:
                     print('Descadastro feito com sucesso.')
-            print('=' * 40)
 
         if opcao == 3:
             desi = 'p'
@@ -96,8 +93,11 @@ while True:
                 if desi == 'S':
                     desi = str(input('Qual é o nome do funcionario? ').strip().capitalize())
                     print('=' * 40)
-                    print(f'O salario do {funcionarios[funcionarios.index(desi)]} '
-                          f'é R${salario[funcionarios.index(desi)]}!')
+                    if desi in funcionarios:
+                        print(f'O salario do {funcionarios[funcionarios.index(desi)]} '
+                              f'é R${salario[funcionarios.index(desi)]:.2f}!')
+                    else:
+                        print(f'{desi} não é um funcionario cadastrado.')
 
                 if desi == 'N':
                     desi = 'p'
@@ -112,10 +112,7 @@ while True:
                             float(input(f'Digite o novo salario do {funcionarios[funcionarios.index(desi)]}: '))
 
             else:
-                print('=' * 40)
                 print('Nenhum funcionario cadastrado.')
-
-            print('=' * 40)
 
         if opcao == 4:
             print('=' * 40)
@@ -166,21 +163,26 @@ while True:
             print('=' * 40)
             while desi not in 'NS':
                 desi = str(input('O cadastro está correto [S/N]? ').upper().strip())
+                print('=' * 40)
                 print('Cadastro realizado com sucesso.')
-            print('=' * 40)
             if desi == 'N':
                 if len(estoque) <= 0:
                     estoque.clear()
+                    print('=' * 40)
                     print('Descadastro realizado com sucesso.')
                 else:
                     estoque.pop()
                     estoque.pop()
+                    print('=' * 40)
                     print('Descadastro realizado com sucesso.')
+
+            desi = 'p'
+            opcao = -1
+            cont = 0
 
         if opcao == 3:
             print('[ESTOQUE] Fechaando...')
 
-        print('=' * 40)
         desi = 'p'
         opcao = -1
         cont = 0
@@ -211,28 +213,26 @@ while True:
             porcen = ((ganh - gasto) * 100) // gasto
 
             print(f'Gastos TOTAL: R${gasto:.2f}.\nGanhos TOTAL: R${ganh:.2f}.'
-                  f'\nIsso é {porcen}% do dinheiro da empresa.')
+                  f'\nIsso é {porcen:.0f}% do dinheiro da empresa.')
 
-        if opcao == 2 and len(gastos) > 0:
+        if len(ganhos) <= 0 and len(gastos) <= 0:
+            print('Não ah nenhum valor registrado...')
+
+        if opcao == 2:
             gasto = 0
             for preco in gastos:
                 gasto += preco
             print(f'Os gastos do Estoque.\nDa um total de: R${gasto:.2f}.')
 
-        if opcao == 3 and len(salario) > 0:
+        if opcao == 3:
             gasto = 0
             for valo in salario:
                 gasto += valo
             print(f'Os gastos com {len(funcionarios)} Funcionario(s).\nDa um total de: R${gasto:.2f}.')
 
-        if opcao == 1 or opcao == 2 or opcao == 3:
-            if len(gastos) <= 0 and len(salario) <= 0 and len(ganhos) <= 0:
-                print('Não ah nenhum valor registrado...')
-
         if opcao == 4:
             print('Fechando [GASTOS]...')
 
-        print('=' * 40)
         opcao = -1
         cont = 0
         desi = 'p'
@@ -263,6 +263,7 @@ while True:
             if desi in produtos:
                 produtos[produtos.index(desi)] = desi
                 produtos[produtos.index(desi) + 1] += cont
+
             else:
                 produtos.append(desi)
                 produtos.append(cont)
@@ -283,7 +284,7 @@ while True:
 
         if opcao == 3:
             print('[PRODUTOS] Fechaando...')
-        print('=' * 40)
+
         cont = 0
         desi = 'p'
         opcao = -1
@@ -306,24 +307,27 @@ while True:
             else:
                 cont = int(input('Quantidade: ').strip())
 
-                if cont >= produtos[produtos.index(desi) + 1]:
-                    cont = produtos[produtos.index(desi) + 1]
+                if cont > 0 and desi in produtos:
+                    if cont >= produtos[produtos.index(desi) + 1]:
+                        cont = produtos[produtos.index(desi) + 1]
 
-                if desi in produtos:
                     pre = desi
+                    precod = 0
 
-                    if estoque[estoque.index(desi) + 1] > 1:
-                        pr = gastos[estoque.index(desi) - 1] // estoque[estoque.index(desi) + 1]
-                        sug = (pr * cont) * 0.5
+                    if pre in estoque:
+                        frac = estoque.index(pre) // 2
+                        soma = estoque[estoque.index(pre) + 1] + produtos[produtos.index(pre) + 1]
+                        precod = (gastos[frac] / soma) * cont * 0.43
 
                     else:
-                        pr = gastos[estoque.index(desi)] // estoque[estoque.index(desi) + 1]
-                        sug = (pr * cont) * 0.5
+                        frac = produtos.index(pre) // 2
+                        precod = ((gastos[frac] / produtos[produtos.index(pre) + 1]) * cont) * 0.43
 
                     print('=' * 40)
 
-                    print(f'Valor de {cont:.0f} unidades de {desi} É: R${sug:.2f}.')
+                    print(f'Valor de {cont:.0f} unidade(s) de {desi} É: R${precod:.2f}.')
 
+                    print('=' * 40)
                     while desi not in 'SN':
                         desi = str(input('Deseja efetuar a compra [S/N]? ').upper().strip())
 
@@ -331,11 +335,11 @@ while True:
                         if cont >= produtos[produtos.index(pre) + 1]:
                             del produtos[produtos.index(pre) + 1]
                             del produtos[produtos.index(pre)]
-                            ganhos.append(sug)
+                            ganhos.append(precod)
 
                         else:
                             produtos[produtos.index(pre) + 1] -= cont
-                            ganhos.append(sug)
+                            ganhos.append(precod)
 
                         print('=' * 40)
                         print('Compra efetuada com sucesso...')
@@ -343,6 +347,9 @@ while True:
                     else:
                         print('=' * 40)
                         print('Compra cancelada com sucesso...')
+                else:
+                    print('=' * 40)
+                    print(f'Não é possivel comprar {cont} unidades.')
 
         if opcao == 2:
             print(f'Foram vendidos um total de {len(ganhos)} mercadoria.')
@@ -350,7 +357,6 @@ while True:
         if opcao == 3:
             print('[VENDAS] Fechando...')
 
-        print('=' * 40)
         opcao = -1
         cont = 0
         desi = 'p'
@@ -360,3 +366,6 @@ while True:
         print('[FECHANDO]....')
         print('=' * 40)
         break
+
+
+
