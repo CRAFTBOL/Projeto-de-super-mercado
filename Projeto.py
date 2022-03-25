@@ -48,9 +48,6 @@ while True:
                     funcionarios.append(str(input('Digite o nome do funcionario: ').capitalize().strip()))
                     salario.append(float(input('Digite o salario do funcionario: ')))
 
-                    for salarios in salario:
-                        gastos.append(salarios)
-
                     print('=' * 40)
                     desi = str(input('Esta correto as informações [S/N]? ').upper().strip())
                     print('=' * 40)
@@ -201,34 +198,44 @@ while True:
             ganh = 0
             gasto = 0
 
-            for valor in gastos:
-                gasto += valor
+            for v in gastos:
+                gasto += v
 
-            for valo in salario:
-                gasto += valo
+            for v in salario:
+                gasto += v
 
-            for numero in ganhos:
-                ganh += numero
+            for v in ganhos:
+                ganh += v
 
             porcen = ((ganh - gasto) * 100) // gasto
 
             print(f'Gastos TOTAL: R${gasto:.2f}.\nGanhos TOTAL: R${ganh:.2f}.'
                   f'\nIsso é {porcen:.0f}% do dinheiro da empresa.')
 
-        if len(ganhos) <= 0 and len(gastos) <= 0:
-            print('Não ah nenhum valor registrado...')
 
-        if opcao == 2:
+        if opcao == 2 and len(gastos) > 0:
             gasto = 0
             for preco in gastos:
                 gasto += preco
             print(f'Os gastos do Estoque.\nDa um total de: R${gasto:.2f}.')
 
-        if opcao == 3:
+        if opcao == 3 and len(salario) > 0:
             gasto = 0
             for valo in salario:
                 gasto += valo
             print(f'Os gastos com {len(funcionarios)} Funcionario(s).\nDa um total de: R${gasto:.2f}.')
+
+        if len(salario) <= 0 or len(gastos) <= 0:
+          if opcao == 1 or opcao == 2 and len(gastos) <= 0:
+            print('Não ah nenhum valor registrado...')
+          else:
+            print('Valor indisponivel no momento...')
+            
+          if opcao == 3 and len(salario) <= 0:
+            print('Não ah nenhum valor registrado...')
+          else:
+            print('Valor indisponivel no momento...')
+          
 
         if opcao == 4:
             print('Fechando [GASTOS]...')
@@ -366,6 +373,5 @@ while True:
         print('[FECHANDO]....')
         print('=' * 40)
         break
-
 
 
